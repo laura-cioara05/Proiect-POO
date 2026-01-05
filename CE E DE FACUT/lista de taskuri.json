@@ -1,0 +1,76 @@
+{
+  
+  TASK URI,
+  
+  --Metodele pentru Client(sunt mai putine deoarece se pot repeta cu cele de la Administrator care sunt deja facute)
+    **metodele se adauga in clasele coordonatoare GestionareRezervari si GestionareTerenuri din Application in functie,
+    de rolul lor .Apoi se apeleaza in ComplexSportiv,
+  
+  --Meniu 
+  --clasa Autentificare in Application,
+  
+  --Fisierele json cu datele pentru Utilizatori,Rezervari,Terenuri,Reguli de rezervari,etc(pentru ele se face un nou 
+  folder Fisiere ),
+  
+  --Trebuie facut ceva cu aruncarile de exceptii ca sa nu se opreasca programul pentru fiecare aruncare din diversele,
+  metode,
+  
+  --clasa ILogger (Utilizarea ILogger pentru logarea erorilor și a acțiunilor utilizatorilor.)
+  --Folosirea .NET Core GenericHost pentru configurarea aplicației și gestionarea dependențelor.,
+  
+  
+  
+  
+        
+        
+  DOCUMENTATIE(rol clase),
+  
+  DOMAIN
+  --OrarFunctionare,
+        *e o clasa care contine programul de inchiriere al unui teren si o lista de intervale indisponibile(primita deja ,care poate fi mofificata de administrator)
+        *vfunctia EsteDisponibil verifica atunci cand se face o rezervare daca intervalul dorit se suprapune cu vreunul din intervalele din lista de intervale indisponibile
+        *metodele ModificaProgram, AdaugaIntervalIndisponibil,StergeIntervalIndisponibil sunt realizate aici, si apar si in clasele TerenDeSport ,GestionareTerenuri si ComplexSportiv,
+        (se folosesc multe leyere),
+  
+  --IntervalOrar,
+        *Scop: Este folosit pentru a defini când are loc o rezervare.
+        *IntervalOrar este în Common pentru că este UNIVERSAL,
+  
+  --ReguliRezervare e o clasa care este utilizata in GestionareRezervari in metodele VerificaReguliRezervare(o metoda care de fapt arunca erori daca vreuna din reguli nu e indeplinita),
+  si AnuleazaRezervarea(daca perioada de anulare a trecut se arunca eroare).
+        
+  --Rezervare,RezervareStatus,TerenDeSport,TipTeren sunt clase de baza  simple
+  
+  APPLICATION,
+  
+  --GestionareRezervari si GestionareTerenuri sunt clase controller/coordonatoare
+                GestionareTerenuri: Este inventarul bazei sportive. Ea știe câte terenuri ai, le poate scoate din listă 
+                sau le poate adăuga. Este singura care are "cheia" de la lista privată _terenuri.
+              
+                GestionareRezervari: Este registrul de programări. Ea verifică dacă regulile sunt respectate înainte de 
+                a scrie o rezervare nouă. Ea face legătura între un Client, un Teren și un Interval.,
+  
+  "OBS":Ele contin Acțiuni Simple și Acțiuni de Sistem.,
+  
+        A. Metodele pe multe layere (Delegarea)
+        Exemplu: ModificaProgramTeren. Aceasta trece prin ComplexSportiv -> GestionareTerenuri -> TerenDeSport -> OrarFunctionare.
+      
+        De ce? Pentru că este o acțiune care vine de la utilizator (Admin) și trebuie să "sape" până în adâncul sistemului 
+        pentru a modifica o valoare mică.
+      
+        Motivul POO: Fiecare strat are o pază. ComplexSportiv verifică dacă ești logat, GestionareTerenuri caută dacă terenul 
+        există, iar OrarFunctionare verifică dacă ora de închidere e după cea de deschidere. Dacă ai sări peste vreun strat,
+        ai putea strica datele,
+
+
+        B. Metodele pe puține layere (Logica Internă)
+        Exemplu: EsteDisponibil sau SeSuprapuneCu. Acestea stau doar în OrarFunctionare sau IntervalOrar.
+
+
+  --ComplexSportiv: reprezintă punctul central al aplicației, fiind o clasă de tip Fațadă (Facade Pattern).
+        
+  INFRASTRUCTURE
+  "--IStocareDate": trebuie să ai o metodă de Incarca și una de Salveaza
+  "--JsonStocareDate": transforma textul si il baga in constructor, dar verifica si erorile
+             
+}
