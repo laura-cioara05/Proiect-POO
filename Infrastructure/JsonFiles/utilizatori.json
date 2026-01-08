@@ -1,0 +1,15 @@
+[
+  {
+    "Type": "Admin",
+    "Id": "436f9649-9c46-4794-a1a9-fad0c4b4e2b6",
+    "Username":"admin",
+    "Password": "989"
+  },
+  {
+    "Type": "Client",
+    "Id": "fc5e66c4-e990-41cf-bb63-45b4044b2b1d",
+    "Username": "client",
+    "Password": "7645"
+  }
+]
+
