@@ -102,18 +102,26 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
     {
         // verifică dacă intervalul este disponibil
         if (!teren.Program.EsteDisponibil(interval))
+        {
+            _logger.LogError($"Inteval {interval} indisponibil");
             throw new RezervareException("Intervalul ales nu este disponibil!");
+        }
         // verifică durata standard
         if (interval.Durata < _reguliRezervare.DurataStandard)
+        {
+            _logger.LogError($"Durata rezervarii prea scurta pentru client {clientId}.Interval={interval}");
             throw new RezervareException("Durata rezervarii nu respecta regula standard!");
-
+        }
         // verifică numarul maxim de rezervări simultane per client
         int rezervariActiveClient = _rezervari.Count(r =>
             r.ClientId == clientId &&
             r.Status == RezervareStatus.Activa);
 
         if (rezervariActiveClient > _reguliRezervare.NumarMaximRezervariSimultane)
+        {
+            _logger.LogError($"Numar maxim de rezervari atins de catre client {clientId}");
             throw new RezervareException("Ai atins numarul maxim de rezervari active!");
+        }
         
         //  Suprapuneri cu alte rezervări
         bool suprapunere = _rezervari.Any(r =>
@@ -124,7 +132,7 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
 
         if (suprapunere)
         {
-            _logger.LogError("");
+            _logger.LogError($"Intervalul se suprapune cu o alta rezervrea.TerenId={teren.Id}, Interval={interval}");
             throw new RezervareException("Intervalul se suprapune cu o altă rezervare activă!");
         }
     }
