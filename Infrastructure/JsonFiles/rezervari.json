@@ -1,2 +1,42 @@
-{
-}
+[
+  {
+    "Id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "TerenId": "11111111-1111-1111-1111-111111111111",
+    "ClientId": "fc5e66c4-e990-41cf-bb63-45b4044b2b1d",
+    "Interval": {
+      "Start": "2026-01-20T18:00:00",
+      "End": "2026-01-20T19:00:00"
+    },
+    "Status": 0
+  },
+  {
+    "Id": "rez22222-rez2-rez2-rez2-rez222222222",
+    "TerenId": "22222222-2222-2222-2222-222222222222",
+    "ClientId": "fc5e66c4-e990-41cf-bb63-45b4044b2b1d",
+    "Interval": {
+      "Start": "2025-12-10T10:00:00",
+      "End": "2025-12-10T11:00:00"
+    },
+    "Status": 2
+  },
+  {
+    "Id": "rez33333-rez3-rez3-rez3-rez333333333",
+    "TerenId": "33333333-3333-3333-3333-333333333333",
+    "ClientId": "a1b2c3d4-e5f6-4a7b-8c9d-0123456789ab",
+    "Interval": {
+      "Start": "2026-01-21T16:00:00",
+      "End": "2026-01-21T17:00:00"
+    },
+    "Status": 0
+  },
+  {
+    "Id": "rez44444-rez4-rez4-rez4-rez444444444",
+    "TerenId": "44444444-4444-4444-4444-444444444444",
+    "ClientId": "a1b2c3d4-e5f6-4a7b-8c9d-0123456789ab",
+    "Interval": {
+      "Start": "2026-01-03T12:00:00",
+      "End": "2026-01-03T13:00:00"
+    },
+    "Status": 1
+  }
+]

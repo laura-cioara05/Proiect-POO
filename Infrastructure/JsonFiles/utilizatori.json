@@ -8,8 +8,14 @@
   {
     "Type": "Client",
     "Id": "fc5e66c4-e990-41cf-bb63-45b4044b2b1d",
-    "Username": "client",
-    "Password": "7645"
+    "Username": "ion.popescu",
+    "Password": "ion"
+  },
+  {
+    "Type": "Client",
+    "Id": "a1b2c3d4-e5f6-4a7b-8c9d-0123456789ab",
+    "Username": "maria.ionescu",
+    "Password": "maria"
   }
 ]
 
