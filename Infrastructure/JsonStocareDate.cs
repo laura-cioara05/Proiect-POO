@@ -1,8 +1,8 @@
 using System.Text.Json;
 
-namespace PROIECT_POO.Infrastructure;
+namespace PROIECT_POO.Application.Interfaces;
 
-public class JsonStocareDate:IStocareDate
+public class JsonStocareDate
 {
 private readonly JsonSerializerOptions _optiuni = new() { WriteIndented = true };
 

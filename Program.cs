@@ -3,15 +3,17 @@ using PROIECT_POO.Domain.Common;
 using PROIECT_POO.Domain.Terenuri;
 using PROIECT_POO.Domain.Utilizatori;
 using PROIECT_POO.Infrastructure;
+using PROIECT_POO.Infrastructure.Logging;
 
 // 1. Initializare
 IStocareDate storage = new JsonStocareDate();
-ComplexSportiv complex = new ComplexSportiv(storage);
+ILogger logger = new ConsoleLogger();
+ComplexSportiv complex = new ComplexSportiv(storage,logger);
 
 // Simulare Login (In realitate aici ai cere email/parola)
 // Cream obiectele de test pentru a vedea cum functioneaza polimorfismul
-Utilizator adminLogat = new AdministratorComplexSportiv(Guid.NewGuid(), "Admin_Sef", "1234", "admin@complex.ro", "0700000000");
-Utilizator clientLogat = new Client(Guid.Parse("00000000-0000-0000-0000-000000000001"), "Ion_Popescu", "pass", "ion@gmail.com", "0711111111");
+Utilizator adminLogat = new AdministratorComplexSportiv(Guid.NewGuid(), "Admin_Sef","pa");
+Utilizator clientLogat = new Client(Guid.Parse("00000000-0000-0000-0000-000000000001"), "Ion_Popescu", "pass");
 
 bool rulare = true;
 while (rulare)
@@ -58,9 +60,9 @@ void MeniuAdmin(ComplexSportiv complex, Utilizator user)
             switch (opt)
             {
                 case "1":
-                    Console.Write("Nume: "); string nume = Console.ReadLine();
+                    Console.Write("Locatie: "); string locatie = Console.ReadLine();
                     Console.Write("Tip (0-Fotbal, 1-Tenis, 2-Baschet): "); TipTeren tip = (TipTeren)int.Parse(Console.ReadLine());
-                    complex.AdaugaTeren(new TerenDeSport(Guid.NewGuid(), nume, tip, new OrarFunctionare(TimeSpan.FromHours(8), TimeSpan.FromHours(22))));
+                    complex.AdaugaTeren(new TerenDeSport(Guid.NewGuid(),tip, locatie,new OrarFunctionare(TimeSpan.FromHours(8), TimeSpan.FromHours(22))));
                     break;
                 case "2":
                     Console.Write("ID Teren: "); complex.StergeTeren(Guid.Parse(Console.ReadLine()));
@@ -130,7 +132,7 @@ void MeniuClient(ComplexSportiv complex, Utilizator user)
                     Console.Write("Tip (0,1,2): "); TipTeren t = (TipTeren)int.Parse(Console.ReadLine());
                     Console.Write("Start (yyyy-MM-dd HH:mm): "); DateTime s = DateTime.Parse(Console.ReadLine());
                     var libere = complex.CautaTerenuriLibere(t, new IntervalOrar(s, s.AddHours(1)));
-                    foreach(var ter in libere) Console.WriteLine($"Disponibil: {ter.Nume} (ID: {ter.Id})");
+                    foreach(var ter in libere) Console.WriteLine($"Disponibil: {ter.Locatie} (ID: {ter.Id})");
                     break;
                 case "2":
                     Console.Write("ID Teren: "); Console.WriteLine(complex.GetInfoTeren(Guid.Parse(Console.ReadLine())));

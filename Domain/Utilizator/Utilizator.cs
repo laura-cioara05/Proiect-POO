@@ -11,15 +11,12 @@ public abstract class Utilizator
     public Guid Id { get; }
     public string Username { get; }
     public string Password { get; }
-    public string Email { get; }
-    public string Telefon { get; }
 
-    protected Utilizator(Guid id, string username, string password, string email, string telefon)
+
+    protected Utilizator(Guid id, string username, string password)
     {
         Id = id;
         Username = username;
         Password = password;
-        Email = email;
-        Telefon = telefon;
     }
 }

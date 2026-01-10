@@ -4,15 +4,11 @@
     "Id": "11111111-1111-1111-1111-111111111111",
     "Username": "Admin_Complex",
     "Password": "admin_password",
-    "Email": "admin@complex.ro",
-    "Telefon": "0733999888"
   },
   {
     "$type": "client",
     "Id": "00000000-0000-0000-0000-000000000001",
     "Username": "Ion_Popescu",
     "Password": "client_password",
-    "Email": "ion@email.com",
-    "Telefon": "0722123456"
   }
 ]

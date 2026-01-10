@@ -19,7 +19,7 @@ public class ComplexSportiv //facade/ punct de acces central UI
     // CONSTRUCTOR
     // ===============================
 
-    public ComplexSportiv(IStocareDate _storage,ILogger logger)
+    public ComplexSportiv(IStocareDate storage,ILogger logger)
     {
         _storage = storage;
         _logger = logger;

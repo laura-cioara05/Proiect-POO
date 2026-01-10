@@ -120,7 +120,7 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
         VerificaReguliRezervare(rezervare.ClientId, teren, intervalNou, rezervareId);
     
         rezervare.ModificaInterval(intervalNou);
-        logger.LogInfo($"Rezervare modificata (RezervareId={rezervare.Id})");
+        _logger.LogInfo($"Rezervare modificata (RezervareId={rezervare.Id})");
     }
     
     private void VerificaReguliRezervare(Guid clientId, TerenDeSport teren, IntervalOrar interval,Guid? rezervareId = null)
