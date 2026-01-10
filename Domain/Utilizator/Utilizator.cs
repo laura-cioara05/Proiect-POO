@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using PROIECT_POO.Application;
-
 namespace PROIECT_POO.Domain.Utilizatori;
+
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "Type")]
 [JsonDerivedType(typeof(AdministratorComplexSportiv), "Admin")]
@@ -11,14 +11,15 @@ public abstract class Utilizator
     public Guid Id { get; }
     public string Username { get; }
     public string Password { get; }
-    [JsonConstructor]
-    public Utilizator(Guid id, string username,string password)
+    public string Email { get; }
+    public string Telefon { get; }
+
+    protected Utilizator(Guid id, string username, string password, string email, string telefon)
     {
         Id = id;
         Username = username;
         Password = password;
+        Email = email;
+        Telefon = telefon;
     }
-    
-    public abstract void AfiseazaMeniu();
-    public abstract void ExecutaServiciu(int serviciu,ComplexSportiv sp);
 }

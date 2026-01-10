@@ -1,9 +1,9 @@
-//using Microsoft.Extensions.Logging;
 using PROIECT_POO.Domain.Rezervari;
 using PROIECT_POO.Domain.Terenuri;
 using PROIECT_POO.Domain.Exceptii;
 using PROIECT_POO.Domain.Common;
 using PROIECT_POO.Infrastructure;
+using PROIECT_POO.Domain.Utilizatori;
 
 namespace PROIECT_POO.Application;
 
@@ -13,7 +13,6 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
     private readonly ReguliRezervare _reguliRezervare;
     private readonly GestionareTerenuri _terenManager ;
     private readonly ILogger _logger;
-
     public IReadOnlyList<Rezervare> Rezervari => _rezervari.AsReadOnly();
 
     public GestionareRezervari(GestionareTerenuri terenManager , ReguliRezervare reguliRezervare,ILogger logger,IEnumerable<Rezervare>? rezervariInitiale=null)
@@ -24,7 +23,7 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
         // Dacă rezervariInitiale este null (ex: fișier lipsă), creăm o listă goală
         _rezervari = rezervariInitiale?.ToList() ?? new List<Rezervare>();
     }
-    
+   // ADMIN
     // ===============================
     //  3.CREARE/ANULARE/MODIFICARE REZERVARI
     // ===============================
@@ -39,8 +38,10 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
         if (teren == null)
         {
             _logger.LogError($"Terenul nu exista (TerenId={terenId})");
-            throw new RezervareException("Terenul nu exista!");
+             throw new RezervareException("Terenul nu exista!");
         }
+           
+        
         VerificaReguliRezervare(clientId, teren, interval);
         
         //Se creeaza rezervarea dupa indeplinirea tuturor conditiilor de mai sus
@@ -48,54 +49,78 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
         _rezervari.Add(rezervare);
         _logger.LogInfo($"Rezervare creata cu succes (TerenId={terenId})");
 
-        //Se adauga intervalul rezervarii in lista de intervale indisponibile
-        teren.AdaugaIntervalIndisponibil(interval);
-        
         return rezervare;
     }
     
-    public void AnuleazaRezervare(Guid rezervareId, Guid clientId)
+    public void AnuleazaRezervare(Guid rezervareId, Utilizator solicitant)
     {
         //Se cauta rezervarea
         var rezervare = _rezervari.FirstOrDefault(r=> r.Id == rezervareId);
         
         //Daca nu se gaseste in lista de rezervari, nu exista
-        if (rezervare == null)
+       if (rezervare == null)
         {
             _logger.LogError($"Rezervarea nu exista (RezervareId={rezervareId})");
             throw new Exception("Rezervare nu exista!");
         }
-        //Persoana care doreste sa anuleze rezervarea nu este aceeasi care a si facut rezervarea
-        if (rezervare.ClientId != clientId)
-        {
-            _logger.LogError($"Anulare neautorizat pentru rezervarea (RezervareId={rezervareId})");
-            throw new RezervareException("Clientul nu are dreptul de a anula rezervarea(Nu pe numele acesta este facuta rezervarea)!");
-        }
-        //Timpul alocat anularii unei rezervari a expirat
-        if ((rezervare.Interval.Start - DateTime.Now) < _reguliRezervare.AnulareMinima)
-        {
-            _logger.LogError($"Nu se  poate anula rezervarea (RezervareId={rezervareId}), timpul a expirat ");
-            throw new RezervareException("Nu se mai poate anula rezervarea,timpul acordat anularii a expirat!");
-        }
-        rezervare.Anuleaza(); 
+        if (solicitant is Client client)
+            {
+                // 1. Verificăm dacă e rezervarea lui
+                if (rezervare.ClientId != client.Id)
+                {
+                    _logger.LogError($"Anulare neautorizat pentru rezervarea (RezervareId={rezervareId})");
+                    throw new RezervareException("Clientul nu are dreptul de a anula rezervarea(Nu pe numele acesta este facuta rezervarea)!");
+                }
+                // 2. Verificăm timpul limită
+                if ((rezervare.Interval.Start - DateTime.Now) < _reguliRezervare.AnulareMinima)
+                {
+                    _logger.LogError($"Timpul pentru anulare a expirat pentru rezervarea (RezervareId={rezervareId})");
+                    throw new RezervareException("Timpul pentru anulare a expirat!");
+                }
+            }
+
+        // Dacă e Admin SAU dacă e Clientul și a trecut de verificări:
+        rezervare.Anuleaza();
         _logger.LogInfo($"Rezervare {rezervareId} anulata cu succes");
     }
     
-    public void ModificaRezervare(Guid rezervareId, IntervalOrar intervalNou)
+    public void ModificaIntervalRezervare(Guid rezervareId, Utilizator solicitant, IntervalOrar intervalNou)
     {
-        var rezervare = _rezervari.FirstOrDefault(r => r.Id == rezervareId)
-                        ?? throw new RezervareException("Rezervarea nu exista!");
+        //Se cauta rezervarea
+        var rezervare = _rezervari.FirstOrDefault(r=> r.Id == rezervareId);
+        
+        //Daca nu se gaseste in lista de rezervari, nu exista
+         if (rezervare == null)
+        {
+            _logger.LogError($"Rezervarea nu exista (RezervareId={rezervareId})");
+            throw new Exception("Rezervare nu exista!");
+        }
+        if (solicitant is Client client)
+        {
+            // Un client poate modifica DOAR rezervarea proprie
+            if (rezervare.ClientId != client.Id)
+                {
+                    _logger.LogError($"Anulare neautorizat pentru rezervarea (RezervareId={rezervareId})");
+                    throw new RezervareException("Clientul nu are dreptul de a anula rezervarea(Nu pe numele acesta este facuta rezervarea)!");
+                }
+            // Un client trebuie să respecte limita de timp (ex: minim 2 ore înainte)
+            if ((rezervare.Interval.Start - DateTime.Now) < _reguliRezervare.AnulareMinima)
+                {
+                    _logger.LogError($"Timpul pentru anulare a expirat pentru rezervarea (RezervareId={rezervareId})");
+                    throw new RezervareException("Timpul pentru anulare a expirat!");
+                }
+            }
+        // Daca este AdministratorComplexSportiv, sarim peste verificarile de mai sus
 
         var teren = _terenManager.GetTeren(rezervare.TerenId)
-                    ?? throw new RezervareException("Terenul rezervării nu exista!");
-        VerificaReguliRezervare(rezervare.ClientId, teren, intervalNou);
-       
-        // modifică intervalul
-        rezervare.ModificaInterval(intervalNou);
+                    ?? throw new RezervareException("Terenul nu mai exista!");
 
-        // actualizează intervalele indisponibile ale terenului
-        teren.AdaugaIntervalIndisponibil(intervalNou);
-        _logger.LogInfo($"Rezervare modificata (RezervareId={rezervare.Id})");
+        // Verificăm dacă noul interval este valid (nu se suprapune, e în programul terenului, etc.)
+        // Pasăm rezervareId pentru a ignora propria rezervare la verificarea suprapunerilor
+        VerificaReguliRezervare(rezervare.ClientId, teren, intervalNou, rezervareId);
+    
+        rezervare.ModificaInterval(intervalNou);
+        logger.LogInfo($"Rezervare modificata (RezervareId={rezervare.Id})");
     }
     
     private void VerificaReguliRezervare(Guid clientId, TerenDeSport teren, IntervalOrar interval,Guid? rezervareId = null)
@@ -103,6 +128,7 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
         // verifică dacă intervalul este disponibil
         if (!teren.Program.EsteDisponibil(interval))
             throw new RezervareException("Intervalul ales nu este disponibil!");
+
         // verifică durata standard
         if (interval.Durata < _reguliRezervare.DurataStandard)
             throw new RezervareException("Durata rezervarii nu respecta regula standard!");
@@ -110,9 +136,10 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
         // verifică numarul maxim de rezervări simultane per client
         int rezervariActiveClient = _rezervari.Count(r =>
             r.ClientId == clientId &&
-            r.Status == RezervareStatus.Activa);
+            r.Status == RezervareStatus.Activa && 
+            (rezervareId == null || r.Id != rezervareId.Value));
 
-        if (rezervariActiveClient > _reguliRezervare.NumarMaximRezervariSimultane)
+        if (rezervariActiveClient >= _reguliRezervare.NumarMaximRezervariSimultane)
             throw new RezervareException("Ai atins numarul maxim de rezervari active!");
         
         //  Suprapuneri cu alte rezervări
@@ -127,10 +154,26 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
             _logger.LogError("");
             throw new RezervareException("Intervalul se suprapune cu o altă rezervare activă!");
         }
+
     }
     
+    
     // ===============================
-    //  3.VIZUALIZARE REZERVARI ACTIVE SAU ISTORICE
+    // ADMIN - 2.MODIFICARE REGULI DE REZERVARE
+    // ===============================
+
+    public void ModificaDurataStandard(TimeSpan durataNoua)
+        =>_reguliRezervare.ModificaDurataStandard(durataNoua);
+    public void ModificaAnulareMinima(TimeSpan timp) 
+        => _reguliRezervare.ModificaAnulareMinima(timp);
+
+    public void ModificaNumarMaximRezervariSimultane(int numar) 
+        => _reguliRezervare.ModificaNumarMaximRezervari(numar);
+    
+    
+    //ADMIN
+    // ===============================
+    //  3.VIZUALIZARE REZERVARI ACTIVE SAU ISTORICE ALE UNUI TEREN
     // ===============================
 
     public IReadOnlyList<Rezervare> GetRezervariActive(Guid terenId)
@@ -148,22 +191,14 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
             .ToList()
             .AsReadOnly();
     }
+  
     
-    
+    //CLIENT
     // ===============================
-    //  3.GESTIONAREA REZERVARILOR PERSONALE
+    //  3.GESTIONAREA REZERVARILOR PERSONALE ALE UNUI CLIENT
     // ===============================
 
     
-    public IReadOnlyList<Rezervare> GetRezervariClient(Guid clientId)
-    {
-        return _rezervari
-            .Where(r => r.ClientId == clientId)
-            .ToList()
-            .AsReadOnly();
-    }
-    
-    //SAU 2 METODE(ISTORICE--VIITOARE)
     public IReadOnlyList<Rezervare> GetRezervariViitoareClient(Guid clientId)
     {
         return _rezervari

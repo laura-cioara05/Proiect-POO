@@ -30,6 +30,12 @@ public class OrarFunctionare
     //Se verifica daca programul ales se suprapune cu vreunul din cele indisponibile
     public bool EsteDisponibil(IntervalOrar interval)
     {
+        // 1. Verificăm dacă ora de start și cea de end sunt în limitele programului (ex: 08:00 - 22:00)
+        bool inProgram = interval.Start.TimeOfDay >= OraDeschidere && 
+                         interval.End.TimeOfDay <= OraInchidere;
+    
+        if (!inProgram) return false;
+        // 2. Verificăm dacă nu se bate cu mentenanța (ce aveai deja)
         return !IntervaleIndisponibile
             .Any(i => i.SeSuprapuneCu(interval));
     }

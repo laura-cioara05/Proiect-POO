@@ -10,30 +10,23 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
 {
     private readonly List<TerenDeSport> _terenuri ;
     private readonly ILogger _logger ;
-
     public IReadOnlyList<TerenDeSport> Terenuri => _terenuri.AsReadOnly();
-    public GestionareTerenuri(ILogger logger, IEnumerable<TerenDeSport>? terenuriInitiale = null)
-    {
+   public GestionareTerenuri(ILogger logger, IEnumerable<TerenDeSport>? terenuriInitiale = null)
+   {
         // Dacă terenuriInitiale este null (ex: fișier lipsă), creăm o listă goală
         _terenuri = terenuriInitiale?.ToList() ?? new List<TerenDeSport>();
-       _logger = logger;
-    }
+        _logger = logger;
+   }
 
+    //   ADMIN
     // ===============================
     // 1.1 ADMINISTRAREA TERENURILOR
     // ===============================
-
-    public TerenDeSport? GetTeren(Guid terenId)
-    { 
-        
-        return _terenuri.FirstOrDefault(t => t.Id == terenId); // _terenuri e lista internă din GestionareTerenuri
-    }
 
     
     public void AdaugaTeren(TerenDeSport teren)
     {
         _terenuri.Add(teren);
-        //Adauga teren in JSON File
     }
     
     public void StergeTeren(Guid terenId, IEnumerable<Rezervare> rezervari)
@@ -44,7 +37,6 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
             _logger.LogError($"Terenul (TerenId: {terenId}) nu exista");
             throw new Exception("Terenul nu exista!");
         }
-         
         //Se verifica daca exista rezervari active pentru terenul ales
         bool existaRezervariActive=rezervari.Any(r=>r.TerenId==terenId && r.Status==RezervareStatus.Activa);
 
@@ -70,7 +62,7 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
         _terenuri.RemoveAll(t => t.Tip == tip);
         _logger.LogInfo($"Terenul (tip: {tip}) a fost sters");
     }
-    
+    //   ADMIN
     // ===============================
     //  1.2 MODIFICARE : PROGRAM TEREN/ INTERVAL INDISPONIBIL 
     // ===============================
@@ -78,25 +70,23 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
     public void ModificaProgramTeren(Guid terenId, TimeSpan oraDeschidereNoua, TimeSpan oraInchidereNoua)
     {
         var teren = _terenuri.FirstOrDefault(t => t.Id == terenId);
-        if (teren == null)
+        if (teren == null)  if (teren == null)
         {
             _logger.LogError($"Terenul (TerenId: {terenId}) nu exista");
             throw new Exception("Terenul nu exista.");
         }
-
         teren.ModificaProgramFunctionare(oraDeschidereNoua, oraInchidereNoua);
-        _logger.LogInfo($"Programul de functionare a terenului (TerenId={terenId}) a fost schimbat");
+         _logger.LogInfo($"Programul de functionare a terenului (TerenId={terenId}) a fost schimbat");
     }
 
     public void AdaugaIntervalIndisponibilTeren(Guid terenId, IntervalOrar interval)
     {
         var teren = _terenuri.FirstOrDefault(t => t.Id == terenId);
-        if (teren == null)
-        {
+        if (teren == null) 
+         {
             _logger.LogError($"Terenul (TerenId: {terenId}) nu exista");
             throw new Exception("Terenul nu exista.");
         }
-
         teren.AdaugaIntervalIndisponibil(interval);
         _logger.LogInfo($"A fost adaugat interval indisponibil de functionare a terenului (TerenId={terenId})");
     }
@@ -109,8 +99,105 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
             _logger.LogError($"Terenul (TerenId: {terenId}) nu exista");
             throw new Exception("Terenul nu exista.");
         }
-
         teren.StergeIntervalIndisponibil(interval);
         _logger.LogInfo($"A fost sters inteval indisponibil a  terenului (TerenId={terenId}) ");
     }
+    
+    
+     
+    //   CLIENT
+    // ===============================
+    // 1.Căutarea terenurilor disponibile
+    // ===============================
+
+  
+    public List<TerenDeSport> CautaTerenuriDisponibile(TipTeren tip, IntervalOrar intervalDorit, IEnumerable<Rezervare> toateRezervarile)
+    {
+        return _terenuri
+            .Where(t => t.Tip == tip) // Filtrare după tip
+            .Where(t => t.Program.EsteDisponibil(intervalDorit)) // Verifică dacă nu e interval indisponibil (mentenanță/orar)
+            .Where(t => !ExistaRezervareSuprapusa(t.Id, intervalDorit, toateRezervarile)) // Verifică să nu fie deja rezervat de altcineva
+            .ToList();
+    }
+
+    private bool ExistaRezervareSuprapusa(Guid terenId, IntervalOrar interval, IEnumerable<Rezervare> rezervari)
+    {
+        return rezervari.Any(r => 
+            r.TerenId == terenId && 
+            r.Status == RezervareStatus.Activa && 
+            r.Interval.SeSuprapuneCu(interval));
+    }
+    
+    //   CLIENT
+    // ===============================
+    // 2.Vizualizarea detaliilor unui teren
+    // ===============================
+    
+    public TerenDeSport? GetTeren(Guid terenId)
+    {
+        return _terenuri.FirstOrDefault(t => t.Id == terenId); 
+    }
+
+    //INTERVALE DISPONIBILE PENTRU UN TEREN
+    
+     // 1. LOGICA MATEMATICĂ (Păstrează această metodă exact cum e pentru calcule)
+    public List<IntervalOrar> CalculeazaIntervaleLibere(Guid terenId, IEnumerable<Rezervare> toateRezervarile)
+    {
+        var teren = _terenuri.FirstOrDefault(t => t.Id == terenId);
+        if (teren == null) return new List<IntervalOrar>();
+
+        DateTime inceputProgram = DateTime.Today.Add(teren.Program.OraDeschidere);
+        DateTime sfarsitProgram = DateTime.Today.Add(teren.Program.OraInchidere);
+
+        var blocaje = teren.Program.IntervaleIndisponibile
+            .Concat(toateRezervarile
+                .Where(r => r.TerenId == terenId && r.Status == RezervareStatus.Activa)
+                .Select(r => r.Interval))
+            .OrderBy(i => i.Start).ToList();
+
+        List<IntervalOrar> libere = new List<IntervalOrar>();
+        DateTime momentCurent = inceputProgram;
+
+        foreach (var blocaj in blocaje)
+        {
+            if (blocaj.Start > momentCurent)
+                libere.Add(new IntervalOrar(momentCurent, blocaj.Start));
+            
+            if (blocaj.End > momentCurent)
+                momentCurent = blocaj.End;
+        }
+
+        if (momentCurent < sfarsitProgram)
+            libere.Add(new IntervalOrar(momentCurent, sfarsitProgram));
+
+        return libere;
+    }
+
+    // 2. AFIȘAREA (Refactorizată să folosească metoda de mai sus)
+    public string GenereazaFisaDisponibilitate(Guid terenId, IEnumerable<Rezervare> toateRezervarile)
+    {
+        var teren = _terenuri.FirstOrDefault(t => t.Id == terenId);
+        if (teren == null) return "Terenul nu a fost găsit.";
+
+        // Luăm informațiile de bază (Locație, Program, Mentenanță)
+        string info = teren.GetDetaliiComplete();
+
+        // În loc să calculăm iar intervalele ocupate, cerem direct intervalele LIBERE
+        var libere = CalculeazaIntervaleLibere(terenId, toateRezervarile);
+
+        info += "\n--- INTERVALE DISPONIBILE PENTRU REZERVARE ---\n";
+        if (libere.Any())
+        {
+            foreach (var interval in libere)
+            {
+                info += $"  [LIBER]: {interval.Start:HH:mm} - {interval.End:HH:mm}\n";
+            }
+        }
+        else
+        {
+            info += "  Ne pare rău, terenul este complet ocupat pentru restul zilei.\n";
+        }
+        return info;
+    }
+    
 }

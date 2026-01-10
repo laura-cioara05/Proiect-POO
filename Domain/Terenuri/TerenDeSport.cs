@@ -32,6 +32,18 @@ public class TerenDeSport//IMUTABIL
     {
         Program = Program.StergeIntervalIndisponibil(interval);
     }
+    
+    public string GetDetaliiComplete()
+    {
+        var detalii = $"Teren {Tip} - Locație: {Locatie}\n" +
+                      $"Program: {Program.OraDeschidere:hh\\:mm} - {Program.OraInchidere:hh\\:mm}\n" +
+                      $"Intervale ocupate/indisponibile azi: \n";
+    
+        foreach (var interval in Program.IntervaleIndisponibile)
+        {
+            detalii += $"  - {interval.Start:HH:mm} până la {interval.End:HH:mm}\n";
+        }
 
-
+        return detalii;
+    }
 }
