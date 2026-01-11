@@ -12,7 +12,7 @@ public abstract class Utilizator
     public string Username { get; }
     public string Password { get; }
 
-
+    [JsonConstructor]
     protected Utilizator(Guid id, string username, string password)
     {
         Id = id;

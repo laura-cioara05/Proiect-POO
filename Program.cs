@@ -1,4 +1,5 @@
 ﻿using PROIECT_POO.Application;
+using PROIECT_POO.Application.Interfaces;
 using PROIECT_POO.Domain.Common;
 using PROIECT_POO.Domain.Terenuri;
 using PROIECT_POO.Domain.Utilizatori;

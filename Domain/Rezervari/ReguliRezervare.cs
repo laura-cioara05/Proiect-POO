@@ -10,11 +10,11 @@ public class ReguliRezervare
     public int NumarMaximRezervariSimultane { get; private set; }
     
     
-    public ReguliRezervare(TimeSpan durata, TimeSpan anulare, int numarMaximRezervariSimultane)
+    public ReguliRezervare(TimeSpan DurataStandard, TimeSpan AnulareMinima, int NumarMaximRezervariSimultane)
     {
-        DurataStandard = durata;
-        AnulareMinima = anulare;
-        NumarMaximRezervariSimultane = numarMaximRezervariSimultane;
+        this.DurataStandard = DurataStandard;
+        this.AnulareMinima = AnulareMinima;
+        this.NumarMaximRezervariSimultane = NumarMaximRezervariSimultane;
     }
     
     public void ModificaDurataStandard(TimeSpan durataNoua)

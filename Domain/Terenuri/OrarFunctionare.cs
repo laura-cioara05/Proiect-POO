@@ -12,19 +12,18 @@ public class OrarFunctionare
     
     [JsonConstructor]
     public OrarFunctionare(
-        TimeSpan oraDeschidere,
-        TimeSpan oraInchidere,
-        IEnumerable<IntervalOrar>? intervaleIndisponibile = null)
+        TimeSpan OraDeschidere,
+        TimeSpan OraInchidere,
+        IReadOnlyList<IntervalOrar>? IntervaleIndisponibile = null)
     {
-        if (oraDeschidere >= oraInchidere)
+        if (OraDeschidere >= OraInchidere)
             throw new ArgumentException("Ora de deschidere trebuie să fie înainte de ora de închidere.");
 
-        OraDeschidere = oraDeschidere;
-        OraInchidere = oraInchidere;
-        IntervaleIndisponibile = intervaleIndisponibile?
-                                     .ToList()
-                                     .AsReadOnly()
-                                 ?? new List<IntervalOrar>().AsReadOnly();
+        this.OraDeschidere = OraDeschidere;
+        this.OraInchidere = OraInchidere;
+        this.IntervaleIndisponibile =
+            IntervaleIndisponibile?.ToList().AsReadOnly()
+            ?? new List<IntervalOrar>().AsReadOnly();
     }
     
     //Se verifica daca programul ales se suprapune cu vreunul din cele indisponibile
