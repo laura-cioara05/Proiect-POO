@@ -26,7 +26,13 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
     
     public void AdaugaTeren(TerenDeSport teren)
     {
+        if (!Enum.IsDefined(typeof(TipTeren), teren.Tip))
+        {
+            _logger.LogError($"Teren invalid: {teren.Tip}");
+            throw new Exception("Terenul este invalid");
+        }
         _terenuri.Add(teren);
+        _logger.LogInfo($"Terenul (tip:{teren.Tip}) a fost adaugat");
     }
     
     public void StergeTeren(Guid terenId, IEnumerable<Rezervare> rezervari)
