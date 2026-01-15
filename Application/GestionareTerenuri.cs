@@ -31,8 +31,15 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
             _logger.LogError($"Teren invalid: {teren.Tip}");
             throw new Exception("Terenul este invalid");
         }
+        
+        bool existaLocatie = _terenuri.Any(t => t.Locatie.Equals(teren.Locatie, StringComparison.OrdinalIgnoreCase));
+        if (existaLocatie)
+        {
+            _logger.LogError($"Tentativa adaugare duplicat: {teren.Locatie}");
+            throw new Exception($"Exista deja un teren cu denumirea '{teren.Locatie}'! Te rugam sa alegi alt nume.");
+        }
         _terenuri.Add(teren);
-        _logger.LogInfo($"Terenul (tip:{teren.Tip}) a fost adaugat");
+        _logger.LogInfo($"Terenul {teren.Locatie} (tip:{teren.Tip}) a fost adaugat");
     }
     
     public void StergeTeren(Guid terenId, IEnumerable<Rezervare> rezervari)
