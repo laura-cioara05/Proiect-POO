@@ -3,8 +3,8 @@ namespace PROIECT_POO.Domain.Common;
 
 public sealed class IntervalOrar
 {
-    public DateTime Start { get; }
-    public DateTime End { get; } 
+    public DateTime Start { get;}
+    public DateTime End { get;} 
     
     public TimeSpan Durata => End - Start;
     
@@ -33,4 +33,13 @@ public sealed class IntervalOrar
     }
 
     public override int GetHashCode() => HashCode.Combine(Start, End);
+    
+    public override string ToString()
+    {
+        if (Start.Date == End.Date)
+        {
+            return $"{Start:yyyy-MM-dd HH:mm} - {End:HH:mm}";
+        }
+        return $"{Start:yyyy-MM-dd HH:mm} - {End:yyyy-MM-dd HH:mm}";
+    }
 }
