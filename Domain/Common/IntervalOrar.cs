@@ -22,4 +22,15 @@ public sealed class IntervalOrar
     {
         return Start < alt.End && alt.Start < End;
     }
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj is IntervalOrar altul)
+        {
+            return this.Start == altul.Start && this.End == altul.End;
+        }
+        return false;
+    }
+
+    public override int GetHashCode() => HashCode.Combine(Start, End);
 }

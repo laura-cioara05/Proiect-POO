@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Laura\\OneDrive\\Desktop\\Proiect-POO\\PROIECT POO.csproj": {}
+    "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Laura\\OneDrive\\Desktop\\Proiect-POO\\PROIECT POO.csproj": {
+    "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Laura\\OneDrive\\Desktop\\Proiect-POO\\PROIECT POO.csproj",
+        "projectUniqueName": "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj",
         "projectName": "PROIECT POO",
-        "projectPath": "C:\\Users\\Laura\\OneDrive\\Desktop\\Proiect-POO\\PROIECT POO.csproj",
+        "projectPath": "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj",
         "packagesPath": "C:\\Users\\Laura\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Laura\\OneDrive\\Desktop\\Proiect-POO\\obj\\",
+        "outputPath": "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Laura\\AppData\\Roaming\\NuGet\\NuGet.Config"

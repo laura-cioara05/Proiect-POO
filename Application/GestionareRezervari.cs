@@ -40,7 +40,6 @@ public class GestionareRezervari// serviciu/coordonator de rezervari(Application
             _logger.LogError($"Terenul nu exista (TerenId={terenId})");
              throw new RezervareException("Terenul nu exista!");
         }
-           
         
         VerificaReguliRezervare(clientId, teren, interval);
         

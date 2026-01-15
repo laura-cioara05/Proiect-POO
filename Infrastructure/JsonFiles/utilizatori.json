@@ -1,14 +1,14 @@
 [
   {
     "Type": "Admin",
-    "Id": "c1c5c7d4-9c7c-4b3b-9a9a-2b99f9e6d111",
-    "Username": "Admin_Complex",
-    "Password": "admin_password",
+    "Id": "3c2f234f-bc7b-428f-950d-64d28d0bb32e",
+    "Username": "Admin_Sef",
+    "Password": "pa"
   },
   {
     "Type": "Client",
-    "Id": "a2b3c4d5-1234-5678-9999-abcdefabcdef",
+    "Id": "00000000-0000-0000-0000-000000000001",
     "Username": "Ion_Popescu",
-    "Password": "client_password",
+    "Password": "pass"
   }
 ]
