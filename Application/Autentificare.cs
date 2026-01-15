@@ -13,7 +13,7 @@ public class Autentificare
     public Autentificare(IStocareDate stocareDate, ILogger logger)
     {
         //Incarca utilizatorii din fisierul JSON
-        _utilizatori = stocareDate.Incarca<Utilizator>("C:\\Users\\Diana\\Desktop\\POO\\Proiect Rezervare terenuri sport\\Proiect-POO\\Infrastructure\\JsonFiles\\utilizatori.json");
+        _utilizatori = stocareDate.Incarca<Utilizator>("utilizatori.json");
         _logger = logger;
     }
 

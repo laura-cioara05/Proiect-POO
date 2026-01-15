@@ -19,4 +19,7 @@ public abstract class Utilizator
         Username = username;
         Password = password;
     }
+
+    public abstract void AfisareMeniu();
+    public abstract void ExecutaMeniu(ComplexSportiv complex);
 }
