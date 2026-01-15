@@ -1,16 +1,36 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using PROIECT_POO.Infrastructure;
 
 namespace PROIECT_POO.Application.Interfaces;
 
 public class JsonStocareDate : IStocareDate
 {
-    private readonly JsonSerializerOptions _optiuni = new() { WriteIndented = true };
+    private readonly JsonSerializerOptions _optiuni = new()
+    {
+        WriteIndented = true,
+        PropertyNameCaseInsensitive = true,
+        Converters = { new JsonStringEnumConverter() }
+    };
 
     public void Salveaza<T>(string caleFisier, IEnumerable<T> date)
     {
-        string json = JsonSerializer.Serialize(date, _optiuni);
-        File.WriteAllText(creareCaleFisier(caleFisier), json);
+        try
+        {
+            // Ne asiguram ca folderul exista
+            string? director = Path.GetDirectoryName(creareCaleFisier(caleFisier));
+            if (!string.IsNullOrEmpty(director) && !Directory.Exists(director))
+            {
+                Directory.CreateDirectory(director);
+            }
+
+            string json = JsonSerializer.Serialize(date, _optiuni);
+            File.WriteAllText(creareCaleFisier(caleFisier), json);
+        }
+        catch (JsonException)
+        {
+            Console.WriteLine($"Eroare la salvare in {creareCaleFisier(caleFisier)}.");
+        }
     }
  
 

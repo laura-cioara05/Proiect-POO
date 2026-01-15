@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj": {}
+    "/Users/katehiz/Desktop/Proiect-POO/PROIECT POO.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj": {
+    "/Users/katehiz/Desktop/Proiect-POO/PROIECT POO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj",
+        "projectUniqueName": "/Users/katehiz/Desktop/Proiect-POO/PROIECT POO.csproj",
         "projectName": "PROIECT POO",
-        "projectPath": "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\PROIECT POO.csproj",
-        "packagesPath": "C:\\Users\\Laura\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Laura\\RiderProjects\\Proiect-POO_Update\\obj\\",
+        "projectPath": "/Users/katehiz/Desktop/Proiect-POO/PROIECT POO.csproj",
+        "packagesPath": "/Users/katehiz/.nuget/packages/",
+        "outputPath": "/Users/katehiz/Desktop/Proiect-POO/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Laura\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/katehiz/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -58,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\Laura\\.dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/katehiz/.dotnet/sdk/8.0.416/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

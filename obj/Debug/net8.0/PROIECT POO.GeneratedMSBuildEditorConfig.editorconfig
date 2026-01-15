@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PROIECT_POO
-build_property.ProjectDir = C:\Users\Laura\RiderProjects\Proiect-POO_Update\
+build_property.ProjectDir = /Users/katehiz/Desktop/Proiect-POO/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
