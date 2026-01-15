@@ -13,8 +13,8 @@ ComplexSportiv complex = new ComplexSportiv(storage,logger);
 
 // Simulare Login (In realitate aici ai cere email/parola)
 // Cream obiectele de test pentru a vedea cum functioneaza polimorfismul
-Utilizator adminLogat = new AdministratorComplexSportiv(Guid.NewGuid(), "Admin_Sef","pa");
-Utilizator clientLogat = new Client(Guid.Parse("00000000-0000-0000-0000-000000000001"), "Ion_Popescu", "pass");
+Utilizator adminLogat = new AdministratorComplexSportiv(Guid.NewGuid(), "admin","989");
+Utilizator clientLogat = new Client(Guid.Parse("fc5e66c4-e990-41cf-bb63-45b4044b2b1d"), "ion.popescu", "ion");
 var listaInitiala = new List<Utilizator> { adminLogat, clientLogat };
 storage.Salveaza("utilizatori.json", listaInitiala);
 
