@@ -1,5 +1,8 @@
-{
-  "DurataStandard": "01:00:00",
-  "AnulareMinima": "02:00:00",
-  "NumarMaximRezervariSimultane": 3
-}
+
+[
+  {
+    "DurataStandard": "01:30:00",
+    "AnulareMinima": "03:00:00",
+    "NumarMaximRezervariSimultane": 4
+  }
+]

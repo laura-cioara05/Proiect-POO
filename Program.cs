@@ -43,17 +43,17 @@ void MeniuAdmin(ComplexSportiv complex, Utilizator user)
     {
         Console.Clear();
         Console.WriteLine($"--- PANOU ADMIN (Logat ca: {user.Username}) ---");
-        Console.WriteLine("1. Adauga Teren Nou");
-        Console.WriteLine("2. Sterge Teren (dupa ID)");
-        Console.WriteLine("3. Sterge toate terenurile de un anumit Tip");
-        Console.WriteLine("4. Modifica Program Functionare Teren");
-        Console.WriteLine("5. Adauga Interval Mentenanta (Indisponibil)");
-        Console.WriteLine("6. Sterge Interval Mentenanta");
-        Console.WriteLine("7. Vezi Rezervari Active Teren");
-        Console.WriteLine("8. Vezi Istoric Rezervari Teren");
-        Console.WriteLine("9. Modifica Reguli Globale (Durata/Anulare/Max)");
-        Console.WriteLine("10. Anuleaza Rezervare (Orice rezervare)");
-        Console.WriteLine("11. Modifica Rezervare (Orice rezervare)");
+        Console.WriteLine("1. Adauga Teren Nou"); //merge
+        Console.WriteLine("2. Sterge Teren (dupa ID)");//merge
+        Console.WriteLine("3. Sterge toate terenurile de un anumit Tip");//merge
+        Console.WriteLine("4. Modifica Program Functionare Teren");//merge
+        Console.WriteLine("5. Adauga Interval Mentenanta (Indisponibil)");//merge
+        Console.WriteLine("6. Sterge Interval Mentenanta");//??
+        Console.WriteLine("7. Vezi Rezervari Active Teren");//merge
+        Console.WriteLine("8. Vezi Istoric Rezervari Teren");//merge 
+        Console.WriteLine("9. Modifica Reguli Globale (Durata/Anulare/Max)");//??
+        Console.WriteLine("10. Anuleaza Rezervare (Orice rezervare)");//merge
+        Console.WriteLine("11. Modifica Rezervare (Orice rezervare)");//merge 
         Console.WriteLine("0. Inapoi");
         
         Console.Write("\nOptiune: ");
@@ -161,8 +161,8 @@ void MeniuAdmin(ComplexSportiv complex, Utilizator user)
                     break;
                 case "11":
                     Console.Write("ID Rezervare: "); Guid rezId = Guid.Parse(Console.ReadLine());
-                    Console.Write("Data Noua Start: "); DateTime ns = DateTime.Parse(Console.ReadLine());
-                    complex.ModificaRezervare(rezId, user, new IntervalOrar(ns, ns.AddHours(1)));
+                    Console.Write("Data Noua Start (yyyy-MM-dd HH:mm): "); DateTime ns = DateTime.Parse(Console.ReadLine());
+                    complex.ModificaRezervare(rezId, user, new IntervalOrar(ns, ns.Add(complex.DURATA_REZERVARE_STANDART)));
                     break;
                 case "0": inAdmin = false; break;
             }
@@ -178,14 +178,14 @@ void MeniuClient(ComplexSportiv complex, Utilizator clientLogat)
     {
         Console.Clear();
         Console.WriteLine($"--- MENIU CLIENT (Logat ca: {clientLogat.Username}) ---");
-        Console.WriteLine("1. Cauta Terenuri Libere dupa Tip si Interval");
-        Console.WriteLine("2. Vezi Info Detaliate Teren");
-        Console.WriteLine("3. Vezi Toate Intervale Libere (Azi)");
-        Console.WriteLine("4. Creaza Rezervare");
-        Console.WriteLine("5. Rezervarile mele ACTIVE");
-        Console.WriteLine("6. Istoricul meul de rezervari");
-        Console.WriteLine("7. Anuleaza o rezervare proprie");
-        Console.WriteLine("8. Modifica o rezervare proprie");
+        Console.WriteLine("1. Cauta Terenuri Libere dupa Tip si Interval");//merge 
+        Console.WriteLine("2. Vezi Info Detaliate Teren");//merge
+        Console.WriteLine("3. Vezi Toate Intervale Libere (Azi)");//merge
+        Console.WriteLine("4. Creaza Rezervare");//merge 
+        Console.WriteLine("5. Rezervarile mele ACTIVE");//merge
+        Console.WriteLine("6. Istoricul meul de rezervari");//merge
+        Console.WriteLine("7. Anuleaza o rezervare proprie");//merge 
+        Console.WriteLine("8. Modifica o rezervare proprie");//merge
         Console.WriteLine("0. Inapoi");
 
         Console.Write("\nOptiune: ");
@@ -197,7 +197,7 @@ void MeniuClient(ComplexSportiv complex, Utilizator clientLogat)
                 case "1":
                     Console.Write("Tip (0,1,2): "); TipTeren t = (TipTeren)int.Parse(Console.ReadLine());
                     Console.Write("Start (yyyy-MM-dd HH:mm): "); DateTime s = DateTime.Parse(Console.ReadLine());
-                    var libere = complex.CautaTerenuriLibere(t, new IntervalOrar(s, s.AddHours(1)));
+                    var libere = complex.CautaTerenuriLibere(t, new IntervalOrar(s, s.Add(complex.DURATA_REZERVARE_STANDART)));//add Add(complex.DURATA_REZERVARE_STANDART)
                     foreach(var ter in libere) Console.WriteLine($"Disponibil: {ter.Locatie} (ID: {ter.Id})");
                     break;
                 case "2":
@@ -209,12 +209,15 @@ void MeniuClient(ComplexSportiv complex, Utilizator clientLogat)
                 case "4":
                     Console.Write("ID Teren: "); Guid tid = Guid.Parse(Console.ReadLine());
                     Console.Write("Start (yyyy-MM-dd HH:mm): "); DateTime rs = DateTime.Parse(Console.ReadLine());
-                    Console.Write("End (yyyy-MM-dd HH:mm): "); DateTime re = DateTime.Parse(Console.ReadLine());
-                    complex.CreeazaRezervare(clientLogat.Id, tid, new IntervalOrar(rs, re));
+                    complex.CreeazaRezervare(clientLogat.Id, tid, new IntervalOrar(rs, rs.Add(complex.DURATA_REZERVARE_STANDART)));
                     break;
                 case "5":
                     var active = complex.GetRezervariActiveClient(clientLogat.Id);
                     foreach(var r in active) Console.WriteLine($"ID: {r.Id} | Teren: {r.TerenId} | Data: {r.Interval.Start}");
+                    break;
+                case "6":
+                    Console.Write("ID Client: "); var istorice = complex.GetIstoricRezervariClient(Guid.Parse(Console.ReadLine()));
+                    foreach(var r in istorice) Console.WriteLine($"ID: {r.Id} | Start: {r.Interval.Start}");
                     break;
                 case "7":
                     Console.Write("ID Rezervare: "); complex.AnuleazaRezervare(Guid.Parse(Console.ReadLine()), clientLogat);
@@ -222,7 +225,7 @@ void MeniuClient(ComplexSportiv complex, Utilizator clientLogat)
                 case "8":
                     Console.Write("ID Rezervare: "); Guid rid = Guid.Parse(Console.ReadLine());
                     Console.Write("Data Noua Start: "); DateTime nrs = DateTime.Parse(Console.ReadLine());
-                    complex.ModificaRezervare(rid, clientLogat, new IntervalOrar(nrs, nrs.AddHours(1)));
+                    complex.ModificaRezervare(rid, clientLogat, new IntervalOrar(nrs, nrs.Add(complex.DURATA_REZERVARE_STANDART)));
                     break;
                 case "0": inClient = false; break;
             }

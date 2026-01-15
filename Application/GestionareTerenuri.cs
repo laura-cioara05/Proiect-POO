@@ -126,6 +126,11 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
   
     public List<TerenDeSport> CautaTerenuriDisponibile(TipTeren tip, IntervalOrar intervalDorit, IEnumerable<Rezervare> toateRezervarile)
     {
+        if (!_terenuri.Any(t => t.Tip == tip))
+        {
+            _logger.LogError($"Terenul (Tip: {tip}) nu exista");
+            throw new Exception("Terenul nu exista.");
+        }
         return _terenuri
             .Where(t => t.Tip == tip) // Filtrare după tip
             .Where(t => t.Program.EsteDisponibil(intervalDorit)) // Verifică dacă nu e interval indisponibil (mentenanță/orar)

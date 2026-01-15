@@ -9,19 +9,26 @@
       "IntervaleIndisponibile": []
     }
   },
+  
   {
     "Id": "33333333-3333-3333-3333-333333333333",
-    "Tip": 1,
-    "Locatie": "Teren Baschet - Sala Polivalenta",
+    "Tip": "Tenis",
+    "Locatie": "Teren Tenis - Sala Polivalenta",
     "Program": {
       "OraDeschidere": "10:00:00",
       "OraInchidere": "20:00:00",
-      "IntervaleIndisponibile": []
+      "IntervaleIndisponibile": [
+        {
+          "Start": "2026-02-02T12:00:00",
+          "End": "2026-02-02T13:00:00",
+          "Durata": "29.01:00:00"
+        }
+      ]
     }
   },
   {
     "Id": "22222222-2222-2222-2222-222222222222",
-    "Tip": 2,
+    "Tip": "Tenis",
     "Locatie": "Teren Tenis - Zgura",
     "Program": {
       "OraDeschidere": "09:00:00",
@@ -31,7 +38,7 @@
   },
   {
     "Id": "44444444-4444-4444-4444-444444444444",
-    "Tip": 3,
+    "Tip": "Volei",
     "Locatie": "Teren Volei - Parcul Rozelor",
     "Program": {
       "OraDeschidere": "08:00:00",
@@ -41,7 +48,7 @@
   },
   {
     "Id": "55555555-5555-5555-5555-555555555555",
-    "Tip": 4,
+    "Tip": "Handbal",
     "Locatie": "Teren Handbal - Sala Sporturilor",
     "Program": {
       "OraDeschidere": "10:00:00",

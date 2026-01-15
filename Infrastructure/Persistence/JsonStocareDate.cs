@@ -16,7 +16,7 @@ public class JsonStocareDate : IStocareDate
     public void Salveaza<T>(string caleFisier, IEnumerable<T> date)
     {
         try
-        {
+        { 
             // Ne asiguram ca folderul exista
             string? director = Path.GetDirectoryName(creareCaleFisier(caleFisier));
             if (!string.IsNullOrEmpty(director) && !Directory.Exists(director))

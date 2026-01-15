@@ -15,6 +15,8 @@ public class ComplexSportiv //facade/ punct de acces central UI
      private readonly Autentificare _autentificare;
     private readonly ILogger _logger;
 
+    public TimeSpan DURATA_REZERVARE_STANDART;
+
     // ===============================
     // CONSTRUCTOR
     // ===============================
@@ -27,6 +29,7 @@ public class ComplexSportiv //facade/ punct de acces central UI
         var reguliSalvate = _storage.Incarca<ReguliRezervare>("reguliDeRezervari.json");
         _reguliRezervare = reguliSalvate.FirstOrDefault() ??
                            new ReguliRezervare(TimeSpan.FromHours(1), TimeSpan.FromHours(2), 3);
+        DURATA_REZERVARE_STANDART = _reguliRezervare.DurataStandard;
 
         // 2. Încărcăm terenurile
         var dateTerenuri = _storage.Incarca<TerenDeSport>("terenuri.json");
