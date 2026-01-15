@@ -1,14 +1,20 @@
 [
   {
     "Type": "Admin",
-    "Id": "3c2f234f-bc7b-428f-950d-64d28d0bb32e",
-    "Username": "Admin_Sef",
-    "Password": "pa"
+    "Id": "436f9649-9c46-4794-a1a9-fad0c4b4e2b6",
+    "Username":"admin",
+    "Password": "989"
   },
   {
     "Type": "Client",
-    "Id": "00000000-0000-0000-0000-000000000001",
-    "Username": "Ion_Popescu",
-    "Password": "pass"
+    "Id": "fc5e66c4-e990-41cf-bb63-45b4044b2b1d",
+    "Username": "ion.popescu",
+    "Password": "ion"
+  },
+  {
+    "Type": "Client",
+    "Id": "a1b2c3d4-e5f6-4a7b-8c9d-0123456789ab",
+    "Username": "maria.ionescu",
+    "Password": "maria"
   }
 ]
