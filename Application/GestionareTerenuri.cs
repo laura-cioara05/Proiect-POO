@@ -26,17 +26,13 @@ public class GestionareTerenuri// serviciu/coordonator de terenuri(Application L
     
     public void AdaugaTeren(TerenDeSport teren)
     {
-        //Se verifica daca exista un teren cu aceeasi locatie
-        bool existaLocatie = _terenuri.Any(t => t.Locatie.Equals(teren.Locatie, StringComparison.OrdinalIgnoreCase));
-
-        if (existaLocatie)
+        if (!Enum.IsDefined(typeof(TipTeren), teren.Tip))
         {
-            _logger.LogError($"Tentativa adaugare duplicat: {teren.Locatie}");
-            throw new Exception($"Exista deja un teren cu denumirea '{teren.Locatie}'! Te rugam sa alegi alt nume.");
+            _logger.LogError($"Teren invalid: {teren.Tip}");
+            throw new Exception("Terenul este invalid");
         }
-
         _terenuri.Add(teren);
-        _logger.LogInfo($"Teren adaugat: {teren.Locatie}");
+        _logger.LogInfo($"Terenul (tip:{teren.Tip}) a fost adaugat");
     }
     
     public void StergeTeren(Guid terenId, IEnumerable<Rezervare> rezervari)
